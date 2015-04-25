@@ -13,34 +13,42 @@
 
 makeCacheMatrix <- function(x = matrix()) {
       # We need to initialize two variables for a dimensions matrix (m, y) instead of a single variable for a vector
+
       m <- NULL
       y <- NULL
       setmatrix <- function(y) {
             x <<- y
             m <<- NULL
       }
-      getmatrix <- function() x                  # Returns matrix 
+      # Returns matrix 
+      getmatrix <- function() x                  
       setinverse <- function(solve) m <<- solve  
       getinverse <- function() m                 
-                                                 # Create a lkist of the functions used within this function
+      
+      # Create a list of the functions used for this working environment
       list(setmatrix = setmatrix, getmatrix = getmatrix,getinverse = getinverse,setinverse = setinverse)
 
 }
 
-## Write a short comment describing this function
 
 cacheSolve <- function(x, ...) {
-# This function computes, caches, solves, set and returns matrix inverse
+# This function computes, caches, solves, set the inverse and returns matrix inverse of the matrix created in makeCacheMatrix
+## If the function runs for the first time for any given amtrix
+## ithe inverse is created in the current working environment and added to cache
       
       m <- x$getinverse()
       if(!is.null(m)) {
             message("getting cached data")
             return(m)
       }
-
+      # create data matrix because it was null
       data <- x$getmatrix()
       x$setmatrix(data)
+
+      # et the inverse and returns matrix inverse   
       m <- solve(data, ...)
+
+      # set the inverse of matrix (dat) into cache
       x$setinverse(m)
       m
 }
